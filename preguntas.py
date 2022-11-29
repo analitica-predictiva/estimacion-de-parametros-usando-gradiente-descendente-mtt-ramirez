@@ -11,7 +11,6 @@ polinomial de grado `n`.
 from numpy import degrees
 
 
-
 def pregunta_01():
     """
     Complete el código presentado a continuación.
