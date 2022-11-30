@@ -22,13 +22,13 @@ def pregunta_01():
     from sklearn.preprocessing import PolynomialFeatures
 
     # Cargue el dataset `data.csv`
-    data = pd.read_csv("data.csv")
+    data = pd.read_csv('data.csv')  
 
     # Cree un objeto de tipo `PolynomialFeatures` con grado `2`
-    poly = PolynomialFeatures(degree=2)
+    poly = PolynomialFeatures(degree=2,interaction_only=False,include_bias=True)
 
     # Transforme la columna `x` del dataset `data` usando el objeto `poly`
-    x_poly = poly.fit_transform(data[["X"]])
+    x_poly = poly.fit_transform(data[["x"]])
 
     # Retorne x y y
     return x_poly, data.y
@@ -46,20 +46,20 @@ def pregunta_02():
     n_iterations = 1000
 
     # Defina el parámetro inicial `params` como un arreglo de tamaño 3 con ceros
-    params = np.zeros(x_poly.shape[1].reshape((1, 3)))
+    params = np.zeros(x_poly.shape[1])
     for epoch in range(n_iterations):
 
         # Compute el pronóstico con los parámetros actuales
-        y_pred = np.dot(x_poly, params)
+        y_pred = np.dot(x_poly,params)
 
         # Calcule el error
-        error = y - y_pred
+        error = [yt-yp for yt,yp in zip(y,y_pred)]
 
         # Calcule el gradiente
-        gradient = -2 * error
+        #gradient =-2* sum(error)
+        gradient=- np.sum(np.multiply(x_poly, np.array(error)[:,np.newaxis]),axis=0)
 
         # Actualice los parámetros
         params = params - learning_rate * gradient
-
 
     return params
